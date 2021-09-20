@@ -3,6 +3,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
+from alien import Alien
 
 
 class AlienAttack:  # Ogólna klasa przeznaczona do zarzadzania zasobami i sposobem działania gry
@@ -17,6 +18,9 @@ class AlienAttack:  # Ogólna klasa przeznaczona do zarzadzania zasobami i sposo
 
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
+        self.aliens = pygame.sprite.Group()
+
+        self._create_fleet()
 
     def run_game(self):  # rozpoczęcie pętli głównej gry
         while True:  # oczekiwanie na naciśnięcie klawisza bądź przycisk myszy
@@ -61,11 +65,16 @@ class AlienAttack:  # Ogólna klasa przeznaczona do zarzadzania zasobami i sposo
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
 
+    def _create_fleet(self): # Utworzenie floty obcych
+        alien = Alien(self) # Utowrzenie obcego
+        self.aliens.add(alien)
+
     def _update_screen(self): # uaktualnienie obrazów na ekranie i przejście do nowego ekranu
         self.screen.fill(self.settings.bg_color)
         self.ship.blitme()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+        self.aliens.draw(self.screen)
 
         pygame.display.flip()  # Wyświetlenie ostatniego modyfikowanego ekranu
 
